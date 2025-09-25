@@ -5,7 +5,7 @@ import { useAuth } from '../../contexts/AuthContext'
 
 const MappingTool = () => {
   const { user } = useAuth()
-  const [searchType, setSearchType] = useState('namaste') // 'namaste' or 'icd'
+  const [searchType, setSearchType] = useState('namaste')
   const [searchTerm, setSearchTerm] = useState('')
   const [searchResults, setSearchResults] = useState([])
   const [loading, setLoading] = useState(false)
@@ -33,7 +33,6 @@ const MappingTool = () => {
     const fetchData = async () => {
       setLoadingCodes(true)
       try {
-        // Fetch NAMASTE codes from API
         const fetchNamasteCodes = async () => {
           const response = await fetch('http://65.2.124.178:5000/api/namaste')
           const data = await response.json()
@@ -51,7 +50,6 @@ const MappingTool = () => {
           })))
         }
 
-        // Fetch ICD codes from API
         const fetchICDCodes = async () => {
           const response = await fetch('http://65.2.124.178:5000/api/icd')
           const data = await response.json()
@@ -65,7 +63,6 @@ const MappingTool = () => {
           })))
         }
 
-        // Fetch disease mappings from API
         const fetchDiseaseMappings = async () => {
           const response = await fetch('http://65.2.124.178:5000/api/disease-mappings')
           const data = await response.json()
@@ -137,7 +134,7 @@ const MappingTool = () => {
           biomedicine: { code: 'No match', display: 'No biomedicine mapping found' }
         }
       })
-    } else { // icd
+    } else {
       return selectedCodes.flatMap(code => {
         const mappings = diseaseMappings.filter(m => m.biomedicine.code === code.code)
         if (mappings.length > 0) {
@@ -172,7 +169,6 @@ const MappingTool = () => {
       type: 'collection',
       timestamp: new Date().toISOString(),
       entry: [
-        // Patient resource
         {
           fullUrl: `Patient/${patient.abhaId}`,
           resource: {
@@ -200,7 +196,6 @@ const MappingTool = () => {
             ]
           }
         },
-        // Condition resources
         ...mappedResults.map((mapping, index) => ({
           fullUrl: `Condition/${patient.abhaId}-${index}`,
           resource: {
@@ -355,7 +350,6 @@ const MappingTool = () => {
       ))}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
@@ -387,7 +381,6 @@ const MappingTool = () => {
           </div>
         </div>
 
-      {/* Patient Details */}
       {user && (
         <div className="bg-white border rounded-lg shadow-sm mb-6">
           <div className="flex items-center justify-between p-4 border-b">
@@ -419,7 +412,6 @@ const MappingTool = () => {
         </div>
       )}
 
-      {/* Search Section */}
       <div className="bg-gray-50 p-4 rounded-lg mb-6">
         <div className="flex flex-col md:flex-row gap-4 mb-4">
           <div className="flex-1">
@@ -459,7 +451,6 @@ const MappingTool = () => {
         </div>
       </div>
 
-      {/* Search Results */}
       {searchResults.length > 0 && (
         <div className="mb-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-3">Search Results</h3>
@@ -524,7 +515,6 @@ const MappingTool = () => {
         </div>
       )}
 
-      {/* Selected Codes */}
       {selectedCodes.length > 0 && (
         <div className="bg-white border rounded-lg shadow-sm mb-6">
           <div className="flex items-center justify-between p-4 border-b">
@@ -560,7 +550,6 @@ const MappingTool = () => {
         </div>
       )}
 
-      {/* Code Mapping Results */}
       {selectedCodes.length > 0 && (
         <div className="bg-white border rounded-lg shadow-sm mb-6">
           <div className="flex items-center justify-between p-4 border-b">

@@ -23,15 +23,11 @@ const DataIngestion = () => {
     }
 
     setLoading(true);
-    // Here you would typically send the file to a backend for processing.
-    // For this example, we'll simulate processing on the client side.
     console.log('Simulating ingestion of', csvFile.name);
 
     const reader = new FileReader();
     reader.onload = (event) => {
       const csvData = event.target.result;
-      // For now, we'll just log the data.
-      // In the next step, we will process this data.
       console.log(csvData);
       alert('File ingested successfully! Check the console for the data.');
       setLoading(false);
@@ -83,8 +79,6 @@ const DataIngestion = () => {
         </Link>
       </div>
       <h2 className="text-2xl font-bold text-gray-900 mb-4">Data Ingestion</h2>
-
-      {/* Tabs */}
       <div className="flex space-x-4 mb-6">
         <button
           onClick={() => setActiveTab('csv')}

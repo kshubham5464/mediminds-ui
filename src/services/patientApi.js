@@ -1,18 +1,10 @@
-// Patient API service for fetching patient details by ABHA ID
-
-const API_BASE_URL = 'http://65.2.124.178:5000/api';
-
-/**
- * Fetch patient details by ABHA ID
- * @param {string} abhaId - The ABHA ID in format XX-XXXX-XXXX-XXXX
- * @returns {Promise<Object>} Patient data or error
- */
+const API_BASE_URL = "http://65.2.124.178:5000/api";
 export const fetchPatientByAbhaId = async (abhaId) => {
   try {
     const response = await fetch(`${API_BASE_URL}/patient/${abhaId}`, {
-      method: 'GET',
+      method: "GET",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
 
@@ -24,27 +16,15 @@ export const fetchPatientByAbhaId = async (abhaId) => {
     const patientData = await response.json();
     return { success: true, data: patientData };
   } catch (error) {
-    console.error('Error fetching patient data:', error);
+    console.error("Error fetching patient data:", error);
     return { success: false, error: error.message };
   }
 };
-
-/**
- * Validate ABHA ID format (client-side)
- * @param {string} abhaId
- * @returns {boolean}
- */
 export const isValidAbhaIdFormat = (abhaId) => {
   const abhaRegex = /^\d{2}-\d{4}-\d{4}-\d{4}$/;
   return abhaRegex.test(abhaId);
 };
-
-/**
- * Format ABHA ID input
- * @param {string} value
- * @returns {string}
- */
 export const formatAbhaId = (value) => {
-  const cleanValue = value.replace(/\D/g, '');
-  return cleanValue.replace(/(\d{2})(\d{4})(\d{4})(\d{4})/, '$1-$2-$3-$4');
+  const cleanValue = value.replace(/\D/g, "");
+  return cleanValue.replace(/(\d{2})(\d{4})(\d{4})(\d{4})/, "$1-$2-$3-$4");
 };

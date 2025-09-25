@@ -17,17 +17,33 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // For demo purposes, do not persist user session
+    const savedUser = localStorage.getItem('emr_user')
+    if (savedUser) {
+      try {
+        const userData = JSON.parse(savedUser)
+        const loginTime = new Date(userData.loginTime)
+        const now = new Date()
+        const hoursSinceLogin = (now - loginTime) / (1000 * 60 * 60)
+
+        if (hoursSinceLogin < 24) {
+          setUser(userData)
+          setAbhaId(userData.abhaId)
+        } else {
+          localStorage.removeItem('emr_user')
+        }
+      } catch (error) {
+        console.error('Error parsing saved user data:', error)
+        localStorage.removeItem('emr_user')
+      }
+    }
     setLoading(false)
   }, [])
 
   const login = async (abhaIdParam) => {
     try {
-      // Fetch patient data from API
       const result = await fetchPatientByAbhaId(abhaIdParam);
       if (result.success) {
         const patientData = result.data;
-        // Set user as patient data
         const userData = {
           ...patientData,
           role: 'patient',
@@ -35,6 +51,7 @@ export const AuthProvider = ({ children }) => {
         };
         setUser(userData);
         setAbhaId(abhaIdParam);
+        localStorage.setItem('emr_user', JSON.stringify(userData));
         return { success: true, user: userData };
       } else {
         throw new Error(result.error);
@@ -55,12 +72,14 @@ export const AuthProvider = ({ children }) => {
           loginTime: new Date().toISOString()
         };
         setUser(userData);
+        localStorage.setItem('emr_user', JSON.stringify(userData));
       }
     }
   }
 
   const logout = () => {
     setUser(null)
+    setAbhaId(null)
     localStorage.removeItem('emr_user')
   }
 

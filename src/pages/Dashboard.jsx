@@ -18,14 +18,10 @@ const Dashboard = () => {
     systemStatus: 'online'
   })
   const [loadingStats, setLoadingStats] = useState(true)
-
-  // Load dashboard stats
   useEffect(() => {
     setLoadingStats(true)
     const patients = JSON.parse(localStorage.getItem('patients') || '[]')
     const bundles = JSON.parse(localStorage.getItem('fhirBundles') || '[]')
-
-    // Calculate recent registrations (last 7 days)
     const sevenDaysAgo = new Date()
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
     const recentPatients = patients.filter(p => new Date(p.registrationDate) > sevenDaysAgo)
@@ -38,8 +34,6 @@ const Dashboard = () => {
     })
     setLoadingStats(false)
   }, [])
-
-  // Search functionality
   useEffect(() => {
     if (searchTerm.trim().length > 0) {
       const patients = JSON.parse(localStorage.getItem('patients') || '[]')
@@ -116,8 +110,8 @@ const Dashboard = () => {
           box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
       `}</style>
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      {}
+      <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
@@ -130,7 +124,7 @@ const Dashboard = () => {
               <div className="h-8 w-8 bg-gray-100 border border-gray-300 rounded flex items-center justify-center mr-3">
                 <span className="text-gray-700 font-bold text-sm">EMR</span>
               </div>
-              <h1 className="text-xl font-semibold text-gray-900">Hospital EMR System</h1>
+              <h1 className="text-xl font-semibold text-gray-900">Mapping System</h1>
             </div>
             <div className="flex items-center space-x-4">
               <button className="p-2 text-gray-600 hover:text-gray-900 transition-colors">
@@ -148,7 +142,7 @@ const Dashboard = () => {
         </div>
       </header>
 
-      {/* Navigation */}
+      {}
       <nav className="bg-white shadow-sm hidden md:block">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex space-x-8">
@@ -181,10 +175,10 @@ const Dashboard = () => {
         </div>
       </nav>
 
-      {/* Mobile Menu */}
+      {}
       {sidebarOpen && (
         <div className="fixed inset-0 z-50 bg-white md:hidden">
-          <div className="flex items-center justify-between p-4 border-b">
+          <div className="flex items-center justify-between p-4">
             <h2 className="text-lg font-semibold">Menu</h2>
             <button
               onClick={() => setSidebarOpen(false)}
@@ -196,7 +190,7 @@ const Dashboard = () => {
           <div className="px-4 py-6 space-y-4">
             {sections.map((section) => (
               section.route ? (
-                <Link 
+                <Link
                   key={section.id}
                   to={section.route}
                   onClick={() => setSidebarOpen(false)}
@@ -227,12 +221,12 @@ const Dashboard = () => {
         </div>
       )}
 
-      {/* Main Content */}
+      {}
       <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         {activeTab === 'overview' ? (
           <div className="space-y-6">
-            {/* Welcome Section */}
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-6">
+            {}
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6">
               <div className="flex items-center space-x-4">
                 <div className="p-3 bg-blue-100 rounded-full">
                   <Stethoscope className="h-8 w-8 text-blue-600" />
@@ -254,11 +248,11 @@ const Dashboard = () => {
               </div>
             </div>
 
-            {/* Stats Cards */}
+            {}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="bg-white rounded-lg shadow-sm border border-blue-200 p-6 hover:shadow-md transition-shadow">
+              <div className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
                 <div className="flex items-center">
-                  <div className="p-3 bg-blue-50 border border-blue-200 rounded-full">
+                  <div className="p-3 bg-blue-50 rounded-full">
                     {loadingStats ? (
                       <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
                     ) : (
@@ -274,9 +268,9 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className="bg-white rounded-lg shadow-sm border border-green-200 p-6 hover:shadow-md transition-shadow">
+              <div className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
                 <div className="flex items-center">
-                  <div className="p-3 bg-green-50 border border-green-200 rounded-full">
+                  <div className="p-3 bg-green-50 rounded-full">
                     {loadingStats ? (
                       <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-green-600"></div>
                     ) : (
@@ -292,9 +286,9 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className="bg-white rounded-lg shadow-sm border border-orange-200 p-6 hover:shadow-md transition-shadow">
+              <div className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
                 <div className="flex items-center">
-                  <div className="p-3 bg-orange-50 border border-orange-200 rounded-full">
+                  <div className="p-3 bg-orange-50 rounded-full">
                     {loadingStats ? (
                       <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-orange-600"></div>
                     ) : (
@@ -310,9 +304,9 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+              <div className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
                 <div className="flex items-center">
-                  <div className={`p-3 rounded-full border-2 ${stats.systemStatus === 'online' ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
+                  <div className={`p-3 rounded-full ${stats.systemStatus === 'online' ? 'bg-green-50' : 'bg-red-50'}`}>
                     {loadingStats ? (
                       <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-gray-600"></div>
                     ) : (
@@ -329,17 +323,17 @@ const Dashboard = () => {
               </div>
             </div>
 
-            {/* Quick Actions & Recent Activity */}
+            {}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Quick Actions */}
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              {}
+              <div className="bg-white rounded-lg shadow-sm p-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
                 <div className="grid grid-cols-2 gap-4">
                   {quickActions.map((action, index) => (
                     <button
                       key={index}
                       onClick={action.action}
-                      className="bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 text-blue-700 p-4 rounded-lg hover:from-blue-100 hover:to-blue-200 hover:border-blue-300 transition-all duration-200 flex flex-col items-center shadow-sm hover:shadow-md"
+                      className="bg-gradient-to-br from-blue-50 to-blue-100 text-blue-700 p-4 rounded-lg hover:from-blue-100 hover:to-blue-200 transition-all duration-200 flex flex-col items-center shadow-sm hover:shadow-md"
                     >
                       <action.icon className="h-6 w-6 mb-2 text-blue-600" />
                       <span className="text-sm font-medium">{action.name}</span>
@@ -348,13 +342,13 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              {/* Recent Activity */}
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              {}
+              <div className="bg-white rounded-lg shadow-sm p-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
                 <div className="space-y-4">
                   {recentActivities.map((activity, index) => (
-                    <div key={index} className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-100">
-                      <div className="p-2 bg-white border border-gray-200 rounded-full shadow-sm">
+                    <div key={index} className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
+                      <div className="p-2 bg-white rounded-full shadow-sm">
                         <activity.icon className="h-4 w-4 text-gray-600" />
                       </div>
                       <div className="flex-1">
@@ -367,8 +361,8 @@ const Dashboard = () => {
               </div>
             </div>
 
-            {/* Search Bar */}
-            <div className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-lg shadow-sm border border-gray-200 p-6">
+            {}
+            <div className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-lg shadow-sm p-6">
               <div className="flex items-center space-x-4">
                 <div className="flex-1">
                   <div className="relative">
@@ -382,18 +376,18 @@ const Dashboard = () => {
                       onFocus={() => searchTerm && setShowSearchResults(true)}
                       className="w-full pl-10 pr-4 py-3 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white shadow-sm"
                     />
-                    {/* Search Results Dropdown */}
+                    {}
                     {showSearchResults && searchResults.length > 0 && (
-                      <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-10 max-h-80 overflow-y-auto">
+                      <div className="absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-lg z-10 max-h-80 overflow-y-auto">
                         {searchResults.map((result, index) => (
                           <div
                             key={`${result.type}-${result.id}-${index}`}
-                            className="flex items-center p-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0"
+                            className="flex items-center p-3 hover:bg-gray-50 cursor-pointer last:border-b-0"
                             onClick={() => {
                               if (result.type === 'patient') {
                                 window.location.href = `/record-viewing?id=${result.id}`
                               } else {
-                                // Handle bundle click - could navigate to bundle details
+
                                 console.log('Bundle clicked:', result.id)
                               }
                               setShowSearchResults(false)
@@ -422,7 +416,7 @@ const Dashboard = () => {
             </div>
           </div>
         ) : (
-          <div className="bg-white rounded-lg shadow-sm border">
+          <div className="bg-white rounded-lg shadow-sm">
             <PatientDetails />
           </div>
         )}

@@ -8,7 +8,6 @@ const OTPModal = ({ isOpen, onClose, onVerify, abhaId }) => {
   const [canResend, setCanResend] = useState(false);
   const [generatedOTP, setGeneratedOTP] = useState("");
 
-  // Helper: show OTP with fallback
   const showOTP = (newOTP, title = "Your OTP for Login") => {
     if ("Notification" in window) {
       if (Notification.permission === "granted") {
@@ -26,14 +25,14 @@ const OTPModal = ({ isOpen, onClose, onVerify, abhaId }) => {
               tag: "otp-notification",
             });
           } else {
-            alert(`Your OTP is: ${newOTP}`); // fallback
+            alert(`Your OTP is: ${newOTP}`);
           }
         });
       } else {
-        alert(`Your OTP is: ${newOTP}`); // denied already
+        alert(`Your OTP is: ${newOTP}`);
       }
     } else {
-      alert(`Your OTP is: ${newOTP}`); // no Notification API
+      alert(`Your OTP is: ${newOTP}`);
     }
   };
 
@@ -45,14 +44,11 @@ const OTPModal = ({ isOpen, onClose, onVerify, abhaId }) => {
       setResendTimer(30);
       setCanResend(false);
 
-      // Generate random 6-digit OTP
       const newOTP = Math.floor(100000 + Math.random() * 900000).toString();
       setGeneratedOTP(newOTP);
 
-      // Show OTP with fallback
       showOTP(newOTP);
 
-      // Start resend timer
       const timer = setInterval(() => {
         setResendTimer((prev) => {
           if (prev <= 1) {
@@ -95,7 +91,6 @@ const OTPModal = ({ isOpen, onClose, onVerify, abhaId }) => {
     const newOTP = Math.floor(100000 + Math.random() * 900000).toString();
     setGeneratedOTP(newOTP);
 
-    // Show new OTP with fallback
     showOTP(newOTP, "New OTP for Login");
   };
 
@@ -188,7 +183,6 @@ const OTPModal = ({ isOpen, onClose, onVerify, abhaId }) => {
           </p>
         </div>
 
-        {/* For dev/demo: always show OTP in modal too */}
         {generatedOTP && (
           <div className="mt-4 text-center">
             <p className="text-xs text-green-600 font-mono">

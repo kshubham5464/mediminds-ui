@@ -1,15 +1,8 @@
-
-// This is a mock API service to simulate a backend.
-// In a real application, you would have a proper backend server.
-
 let storedCsvData = null;
 let codeSystem = null;
 let conceptMap = null;
 
 const createFhirResources = (csvData) => {
-  // This is a simplified example of creating FHIR resources.
-  // A real implementation would require a more robust mapping logic.
-
   codeSystem = {
     resourceType: 'CodeSystem',
     id: 'namaste-cs',
@@ -28,7 +21,7 @@ const createFhirResources = (csvData) => {
     name: 'NamasteConceptMap',
     status: 'active',
     sourceUri: '#namaste-cs',
-    targetUri: 'http://hl7.org/fhir/sid/icd-10-cm', // Example target
+    targetUri: 'http://hl7.org/fhir/sid/icd-10-cm',
     group: [
       {
         source: codeSystem.id,

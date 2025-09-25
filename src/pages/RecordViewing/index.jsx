@@ -7,7 +7,7 @@ const RecordViewing = () => {
   const [fhirBundles, setFhirBundles] = useState([])
   const [selectedPatient, setSelectedPatient] = useState('')
   const [selectedRecord, setSelectedRecord] = useState(null)
-  const [viewMode, setViewMode] = useState('patient') // 'patient', 'fhir', or 'upload'
+  const [viewMode, setViewMode] = useState('patient')
   const [searchTerm, setSearchTerm] = useState('')
   const [fhirFile, setFhirFile] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -32,8 +32,8 @@ const RecordViewing = () => {
   const filteredPatients = patients.filter((patient) => {
     const searchLower = searchTerm.toLowerCase();
     return (
-      patient.name?.toLowerCase().includes(searchLower) || // safe check
-      patient.id?.toLowerCase().includes(searchLower) || // also normalize case
+      patient.name?.toLowerCase().includes(searchLower) ||
+      patient.id?.toLowerCase().includes(searchLower) ||
       patient.conditions?.some(
         (c) =>
           c.code.namaste?.toLowerCase().includes(searchLower) ||
@@ -64,7 +64,7 @@ const RecordViewing = () => {
         })
         if (response.ok) {
           alert('FHIR Bundle uploaded successfully!')
-          loadRecords() // Refresh records
+          loadRecords()
         } else {
           const error = await response.json()
           alert('Error uploading FHIR Bundle: ' + error.error)
@@ -236,7 +236,6 @@ const RecordViewing = () => {
         <p className="text-gray-600">View and search patient records and FHIR bundles.</p>
       </div>
 
-      {/* View Mode Toggle */}
       <div className="flex space-x-4 mb-6">
         <button
           onClick={() => setViewMode('patient')}
@@ -271,7 +270,7 @@ const RecordViewing = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Panel - List */}
+        {}
         <div className="lg:col-span-1">
           <div className="bg-white border rounded-lg">
             <div className="p-4 border-b">
@@ -337,7 +336,7 @@ const RecordViewing = () => {
           </div>
         </div>
 
-        {/* Right Panel - Details */}
+        {}
         <div className="lg:col-span-2">
           <div className="bg-white border rounded-lg p-6">
             {viewMode === 'upload' ? (
@@ -415,7 +414,7 @@ const RecordViewing = () => {
         </div>
       </div>
 
-      {/* Summary Stats */}
+      {}
       <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-blue-50 p-4 rounded-lg">
           <div className="text-2xl font-bold text-blue-600">{patients.length}</div>

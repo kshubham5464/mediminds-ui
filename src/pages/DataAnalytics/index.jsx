@@ -15,16 +15,14 @@ const DataAnalytics = () => {
     registrationTrend: []
   })
 
-  // Colors for charts
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8']
 
   useEffect(() => {
     loadAnalyticsData()
 
-    // Set up real-time updates every 30 seconds
     const interval = setInterval(() => {
       loadAnalyticsData()
-    }, 30000) // 30 seconds
+    }, 30000)
 
     return () => clearInterval(interval)
   }, [])
@@ -36,19 +34,16 @@ const DataAnalytics = () => {
     setPatients(storedPatients)
     setFhirBundles(storedBundles)
 
-    // Calculate analytics
     const totalPatients = storedPatients.length
     const totalConditions = storedBundles.reduce((acc, bundle) => {
       return acc + (bundle.entry?.filter(entry => entry.resource?.resourceType === 'Condition').length || 0)
     }, 0)
 
-    // Gender distribution
     const genderDistribution = storedPatients.reduce((acc, patient) => {
       acc[patient.gender] = (acc[patient.gender] || 0) + 1
       return acc
     }, {})
 
-    // Age distribution (simplified)
     const currentYear = new Date().getFullYear()
     const ageDistribution = storedPatients.reduce((acc, patient) => {
       if (patient.dateOfBirth) {
@@ -59,7 +54,6 @@ const DataAnalytics = () => {
       return acc
     }, {})
 
-    // Most common conditions (from FHIR bundles)
     const conditionCounts = {}
     storedBundles.forEach(bundle => {
       bundle.entry?.forEach(entry => {
@@ -79,7 +73,6 @@ const DataAnalytics = () => {
       .slice(0, 5)
       .map(([condition, count]) => ({ condition, count }))
 
-    // Registration trend (last 7 days) - using local dates
     const last7Days = Array.from({ length: 7 }, (_, i) => {
       const date = new Date()
       date.setDate(date.getDate() - (6 - i))
@@ -119,7 +112,6 @@ const DataAnalytics = () => {
         <p className="text-gray-600">Overview of patient data and system usage analytics.</p>
       </div>
 
-      {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <div className="bg-blue-50 p-6 rounded-lg">
           <div className="flex items-center">
@@ -181,7 +173,6 @@ const DataAnalytics = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Gender Distribution */}
         <div className="bg-white p-6 rounded-lg shadow border">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Gender Distribution</h3>
           {Object.keys(analytics.genderDistribution).length > 0 ? (
@@ -213,7 +204,6 @@ const DataAnalytics = () => {
           )}
         </div>
 
-        {/* Age Distribution */}
         <div className="bg-white p-6 rounded-lg shadow border">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Age Distribution</h3>
           {Object.keys(analytics.ageDistribution).length > 0 ? (
@@ -232,7 +222,6 @@ const DataAnalytics = () => {
           )}
         </div>
 
-        {/* Most Common Conditions */}
         <div className="bg-white p-6 rounded-lg shadow border">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Most Common Conditions</h3>
           {analytics.mostCommonConditions.length > 0 ? (
@@ -251,7 +240,6 @@ const DataAnalytics = () => {
           )}
         </div>
 
-        {/* Registration Trend */}
         <div className="bg-white p-6 rounded-lg shadow border">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Patient Registration Trend (Last 7 Days)</h3>
           {analytics.registrationTrend.length > 0 ? (
@@ -274,7 +262,6 @@ const DataAnalytics = () => {
         </div>
       </div>
 
-      {/* Action Buttons */}
       <div className="mt-6 flex flex-wrap gap-4">
         <button
           onClick={loadAnalyticsData}
@@ -303,7 +290,6 @@ const DataAnalytics = () => {
               localStorage.removeItem('fhirBundles')
               localStorage.removeItem('codeSystems')
               localStorage.removeItem('conceptMaps')
-              // Clear NAMASTE data from backend memory
               fetch('http://65.2.124.178:5000/api/reset', { method: 'POST' })
                 .then(() => {
                   alert('All data has been reset successfully!')

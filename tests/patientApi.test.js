@@ -1,6 +1,3 @@
-/* eslint-disable no-undef */
-
-// Mock fetch globally
 global.fetch = jest.fn();
 
 import { fetchPatientByAbhaId, isValidAbhaIdFormat, formatAbhaId } from '../src/services/patientApi';
