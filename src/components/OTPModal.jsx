@@ -78,23 +78,46 @@ const OTPModal = ({ isOpen, onClose, onVerify, abhaId }) => {
     const newOTP = Math.floor(100000 + Math.random() * 900000).toString()
     setGeneratedOTP(newOTP)
     // Show new OTP in browser notification
-    if (Notification.permission === 'granted') {
-      new Notification('New OTP for Login', {
-        body: `Your new OTP is: ${newOTP}`,
-        icon: '/vite.svg',
-        tag: 'otp-notification'
-      })
-    } else if (Notification.permission !== 'denied') {
-      Notification.requestPermission().then(permission => {
-        if (permission === 'granted') {
-          new Notification('New OTP for Login', {
-            body: `Your new OTP is: ${newOTP}`,
-            icon: '/vite.svg',
-            tag: 'otp-notification'
-          })
-        }
-      })
+    // if (Notification.permission === 'granted') {
+    //   new Notification('New OTP for Login', {
+    //     body: `Your new OTP is: ${newOTP}`,
+    //     icon: '/vite.svg',
+    //     tag: 'otp-notification'
+    //   })
+    // } else if (Notification.permission !== 'denied') {
+    //   Notification.requestPermission().then(permission => {
+    //     if (permission === 'granted') {
+    //       new Notification('New OTP for Login', {
+    //         body: `Your new OTP is: ${newOTP}`,
+    //         icon: '/vite.svg',
+    //         tag: 'otp-notification'
+    //       })
+    //     }
+    //   })
+    // }
+    // Show OTP (either in notification or alert fallback)
+if (Notification.permission === "granted") {
+  new Notification("Your OTP for Login", {
+    body: `Your OTP is: ${newOTP}`,
+    icon: "/vite.svg",
+    tag: "otp-notification",
+  });
+} else if (Notification.permission !== "denied") {
+  Notification.requestPermission().then((permission) => {
+    if (permission === "granted") {
+      new Notification("Your OTP for Login", {
+        body: `Your OTP is: ${newOTP}`,
+        icon: "/vite.svg",
+        tag: "otp-notification",
+      });
+    } else {
+      alert(`Your OTP is: ${newOTP}`); // fallback for non-HTTPS/non-support
     }
+  });
+} else {
+  alert(`Your OTP is: ${newOTP}`); // fallback if denied
+}
+
   }
 
   if (!isOpen) return null
