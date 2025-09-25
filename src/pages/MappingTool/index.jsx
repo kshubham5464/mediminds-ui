@@ -35,7 +35,7 @@ const MappingTool = () => {
       try {
         // Fetch NAMASTE codes from API
         const fetchNamasteCodes = async () => {
-          const response = await fetch('http://localhost:5000/api/namaste')
+          const response = await fetch('http://65.2.124.178:5000/api/namaste')
           const data = await response.json()
           setNamasteCodes(data.map(item => ({
             code: item.code,
@@ -53,7 +53,7 @@ const MappingTool = () => {
 
         // Fetch ICD codes from API
         const fetchICDCodes = async () => {
-          const response = await fetch('http://localhost:5000/api/icd')
+          const response = await fetch('http://65.2.124.178:5000/api/icd')
           const data = await response.json()
           setIcdCodes(data.map(item => ({
             code: item.code,
@@ -67,7 +67,7 @@ const MappingTool = () => {
 
         // Fetch disease mappings from API
         const fetchDiseaseMappings = async () => {
-          const response = await fetch('http://localhost:5000/api/disease-mappings')
+          const response = await fetch('http://65.2.124.178:5000/api/disease-mappings')
           const data = await response.json()
           setDiseaseMappings(data)
         }
@@ -253,7 +253,7 @@ const MappingTool = () => {
     if (bundle) {
       setGeneratingFHIR(true)
       try {
-        const response = await fetch('http://localhost:5000/api/upload/fhir', {
+        const response = await fetch('http://65.2.124.178:5000/api/upload/fhir', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(bundle)

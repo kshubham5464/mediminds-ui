@@ -304,7 +304,7 @@ const DataAnalytics = () => {
               localStorage.removeItem('codeSystems')
               localStorage.removeItem('conceptMaps')
               // Clear NAMASTE data from backend memory
-              fetch('http://localhost:5000/api/reset', { method: 'POST' })
+              fetch('http://65.2.124.178:5000/api/reset', { method: 'POST' })
                 .then(() => {
                   alert('All data has been reset successfully!')
                   loadAnalyticsData()

@@ -50,7 +50,7 @@ const DataIngestion = () => {
     reader.onload = async (event) => {
       try {
         const bundle = JSON.parse(event.target.result);
-        const response = await fetch('http://localhost:5000/api/upload/fhir', {
+        const response = await fetch('http://65.2.124.178:5000/api/upload/fhir', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(bundle)

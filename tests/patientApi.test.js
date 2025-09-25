@@ -25,7 +25,7 @@ describe('patientApi', () => {
       const result = await fetchPatientByAbhaId('12-3456-7890-1234');
       expect(result.success).toBe(true);
       expect(result.data).toEqual(mockPatientData);
-      expect(fetch).toHaveBeenCalledWith('http://localhost:5000/api/patient/12-3456-7890-1234', {
+      expect(fetch).toHaveBeenCalledWith('http://65.2.124.178:5000/api/patient/12-3456-7890-1234', {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' }
       });

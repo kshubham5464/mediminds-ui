@@ -18,10 +18,10 @@ const RecordViewing = () => {
 
   const loadRecords = async () => {
     try {
-      const patientsRes = await fetch('http://localhost:5000/api/patients')
+      const patientsRes = await fetch('http://65.2.124.178:5000/api/patients')
       const patients = await patientsRes.json()
       setPatients(patients)
-      const bundlesRes = await fetch('http://localhost:5000/api/fhir-bundles')
+      const bundlesRes = await fetch('http://65.2.124.178:5000/api/fhir-bundles')
       const bundles = await bundlesRes.json()
       setFhirBundles(bundles)
     } catch (error) {
@@ -29,14 +29,18 @@ const RecordViewing = () => {
     }
   }
 
-  const filteredPatients = patients.filter(patient => {
-    const searchLower = searchTerm.toLowerCase()
+  const filteredPatients = patients.filter((patient) => {
+    const searchLower = searchTerm.toLowerCase();
     return (
-      patient.name.toLowerCase().includes(searchLower) ||
-      patient.id.includes(searchTerm) ||
-      patient.conditions?.some(c => c.code.namaste?.includes(searchTerm) || c.code.icd?.includes(searchTerm))
-    )
-  })
+      patient.name?.toLowerCase().includes(searchLower) || // safe check
+      patient.id?.toLowerCase().includes(searchLower) || // also normalize case
+      patient.conditions?.some(
+        (c) =>
+          c.code.namaste?.toLowerCase().includes(searchLower) ||
+          c.code.icd?.toLowerCase().includes(searchLower)
+      )
+    );
+  });
 
   const getPatientBundles = (patient) => {
     return patient.bundleIds?.map(id => fhirBundles.find(b => b.id === id)).filter(Boolean) || []
@@ -53,7 +57,7 @@ const RecordViewing = () => {
     reader.onload = async (event) => {
       try {
         const bundle = JSON.parse(event.target.result)
-        const response = await fetch('http://localhost:5000/api/upload/fhir', {
+        const response = await fetch('http://65.2.124.178:5000/api/upload/fhir', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(bundle)

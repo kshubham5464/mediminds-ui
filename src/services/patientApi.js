@@ -1,6 +1,6 @@
 // Patient API service for fetching patient details by ABHA ID
 
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = 'http://65.2.124.178:5000/api';
 
 /**
  * Fetch patient details by ABHA ID
