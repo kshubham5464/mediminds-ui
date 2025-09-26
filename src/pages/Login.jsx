@@ -54,7 +54,7 @@ const Login = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-medical-light-blue to-medical-light-green flex items-center justify-center px-4">
       <div className="max-w-md w-full space-y-8">
         <div className="bg-white p-8 rounded-xl shadow-2xl">
           <div className="text-center">
@@ -79,7 +79,7 @@ const Login = () => {
                 required
                 value={abhaId}
                 onChange={handleAbhaIdChange}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-medical-light-teal focus:border-medical-light-teal"
                 placeholder="XX-XXXX-XXXX-XXXX"
               />
               <p className="mt-1 text-xs text-gray-500">

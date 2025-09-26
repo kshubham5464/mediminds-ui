@@ -3,13 +3,18 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Professional Medical Theme */
+/* Professional Medical Theme with Light Palette */
 :root {
   --medical-blue: #1e40af;
   --medical-green: #059669;
   --medical-red: #dc2626;
   --medical-gray: #6b7280;
   --medical-bg: #f8fafc;
+  --light-medical-blue: #dbeafe;
+  --light-medical-green: #d1fae5;
+  --light-medical-teal: #ccfbf1;
+  --light-medical-purple: #e9d5ff;
+  --light-medical-gray: #f3f4f6;
 }
 
 /* Base styles */
@@ -25,7 +30,7 @@ html, body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--medical-bg);
+  background-color: var(--light-medical-gray);
 }
 
 #root {
@@ -171,9 +176,6 @@ html, body {
 }
 
 /* Card styling */
-.card {
-  @apply bg-white rounded-lg shadow border;
-}
 
 .card-header {
   @apply px-6 py-4 border-b border-gray-200;
