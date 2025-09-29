@@ -93,7 +93,7 @@ const PatientDetails = () => {
   )
 
   return (
-    <div className="p-6">
+    <div className="min-h-screen bg-gradient-to-br from-medical-light-gray to-medical-light-blue p-6">
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Patient Details</h2>
         <p className="text-gray-600">Your patient information retrieved via ABHA ID.</p>
@@ -101,7 +101,7 @@ const PatientDetails = () => {
 
       {user ? (
         <div className="space-y-6">
-          <div className="bg-white border rounded-lg p-6">
+          <div className="bg-white/90 border border-gray-100 rounded-xl shadow-sm backdrop-blur-sm p-6">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold text-gray-900">
                 Patient: {user.firstName} {user.lastName}
@@ -125,7 +125,7 @@ const PatientDetails = () => {
           </div>
         </div>
       ) : (
-        <div className="bg-white border rounded-lg p-6">
+        <div className="bg-white/90 border border-gray-100 rounded-xl shadow-sm backdrop-blur-sm p-6">
           <p className="text-gray-600">Please log in to view patient details.</p>
         </div>
       )}

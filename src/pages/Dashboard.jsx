@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import { useAuth } from '../contexts/AuthContext'
 import PatientDetails from '../components/PatientDetails'
 import { Users, FileText, TrendingUp, Activity, Upload, Search, Bell, Settings, Menu, X, Stethoscope, Clipboard, Heart, Calendar, Shield } from 'lucide-react'
@@ -18,6 +19,7 @@ const Dashboard = () => {
     systemStatus: 'online'
   })
   const [loadingStats, setLoadingStats] = useState(true)
+
   useEffect(() => {
     setLoadingStats(true)
     const patients = JSON.parse(localStorage.getItem('patients') || '[]')
@@ -34,6 +36,7 @@ const Dashboard = () => {
     })
     setLoadingStats(false)
   }, [])
+
   useEffect(() => {
     if (searchTerm.trim().length > 0) {
       const patients = JSON.parse(localStorage.getItem('patients') || '[]')
@@ -61,8 +64,6 @@ const Dashboard = () => {
         type: 'bundle',
         id: bundle.id,
         title: bundle.resourceType || 'FHIR Bundle',
-        subtitle: `ID: ${bundle.id}`,
-        details: `${bundle.entry?.length || 0} entries`,
         icon: FileText
       }))
 
@@ -78,17 +79,17 @@ const Dashboard = () => {
     { id: 'overview', name: 'Dashboard', icon: '🏥', isTab: true },
     { id: 'patient-registration', name: 'Patient Details', icon: '👤', isTab: true },
     { id: 'mapping-tool', name: 'Code Mapping', icon: '🔄', route: '/mapping-tool' },
-    { id: 'data-analytics', name: 'Analytics', icon: '📈', route: '/data-analytics' },
     { id: 'record-viewing', name: 'Patient Records', icon: '📋', route: '/record-viewing' },
     { id: 'upload-csv', name: 'Data Upload', icon: '📤', route: '/upload-csv' },
+    { id: 'api-docs', name: 'API Docs', icon: '📘', route: '/api-docs' },
   ]
 
   const quickActions = [
-    { name: 'New Patient', icon: Users, action: () => setActiveTab('patient-registration') },
-    { name: 'Code Mapping', icon: Stethoscope, action: () => window.location.href = '/mapping-tool' },
-    { name: 'Patient Records', icon: Clipboard, action: () => window.location.href = '/record-viewing' },
-    { name: 'Analytics', icon: TrendingUp, action: () => window.location.href = '/data-analytics' },
-  ]
+    { name: 'Patient Details', icon: Users, action: () => setActiveTab('patient-registration'), color: 'from-medical-light-blue to-blue-100 text-blue-700' },
+    { name: 'Code Mapping', icon: Stethoscope, action: () => window.location.href = '/mapping-tool', color: 'from-medical-light-teal to-cyan-100 text-cyan-700' },
+    { name: 'Patient Records', icon: Clipboard, action: () => window.location.href = '/record-viewing', color: 'from-medical-light-purple to-purple-100 text-purple-700' },
+    { name: 'API Docs', icon: FileText, action: () => window.location.href = '/api-docs', color: 'from-medical-light-orange to-orange-100 text-orange-700' },
+      ]
 
   const recentActivities = [
     { type: 'patient', message: 'New patient registered', time: '2 hours ago', icon: Users },
@@ -96,22 +97,30 @@ const Dashboard = () => {
     { type: 'mapping', message: 'Code mapping completed', time: '1 day ago', icon: FileText },
   ]
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5
+      }
+    }
+  }
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <style jsx>{`
-        .medical-gradient {
-          background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-        }
-        .card-shadow {
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
-        }
-        .hover-lift:hover {
-          transform: translateY(-1px);
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-      `}</style>
-      {}
-      <header className="bg-white shadow-sm">
+    <div className="min-h-screen bg-gradient-to-br from-medical-light-gray to-white">
+      <header className="bg-white/80 backdrop-blur shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
@@ -121,10 +130,10 @@ const Dashboard = () => {
               >
                 <Menu className="h-6 w-6" />
               </button>
-              <div className="h-8 w-8 bg-gray-100 border border-gray-300 rounded flex items-center justify-center mr-3">
-                <span className="text-gray-700 font-bold text-sm">EMR</span>
+              <div className="h-8 w-8 bg-gradient-to-br from-medical-light-blue to-white border border-gray-200 rounded flex items-center justify-center mr-3">
+                <span className="text-blue-700 font-bold text-sm">EMR</span>
               </div>
-              <h1 className="text-xl font-semibold text-gray-900">Mapping System</h1>
+              <h1 className="text-xl font-semibold text-gray-900 tracking-tight">Mapping System</h1>
             </div>
             <div className="flex items-center space-x-4">
               <button className="p-2 text-gray-600 hover:text-gray-900 transition-colors">
@@ -142,8 +151,7 @@ const Dashboard = () => {
         </div>
       </header>
 
-      {}
-      <nav className="bg-white shadow-sm hidden md:block">
+      <nav className="bg-white/70 backdrop-blur shadow-sm hidden md:block">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex space-x-8">
             {sections.map((section) => (
@@ -175,7 +183,6 @@ const Dashboard = () => {
         </div>
       </nav>
 
-      {}
       {sidebarOpen && (
         <div className="fixed inset-0 z-50 bg-white md:hidden">
           <div className="flex items-center justify-between p-4">
@@ -221,20 +228,50 @@ const Dashboard = () => {
         </div>
       )}
 
-      {}
       <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         {activeTab === 'overview' ? (
-          <div className="space-y-6">
-            {}
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6">
+          <motion.div
+            className="space-y-6"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            <motion.div
+              className="bg-gradient-to-r from-medical-light-purple to-medical-light-teal rounded-xl p-6 border border-gray-100"
+              variants={itemVariants}
+            >
               <div className="flex items-center space-x-4">
-                <div className="p-3 bg-blue-100 rounded-full">
+                <motion.div
+                  className="p-3 bg-white rounded-full shadow-sm"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                >
                   <Stethoscope className="h-8 w-8 text-blue-600" />
-                </div>
+                </motion.div>
                 <div>
-                  <h2 className="text-xl font-semibold text-gray-900 mb-1">Good morning,  {user?.firstName} {user?.lastName}</h2>
-                  <p className="text-gray-600">Ready to provide excellent patient care today?</p>
-                  <div className="mt-2 flex items-center space-x-4 text-sm text-gray-500">
+                  <motion.h2
+                    className="text-xl font-semibold text-gray-900 mb-1"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5, delay: 0.4 }}
+                  >
+                    Good morning, {user?.firstName} {user?.lastName}
+                  </motion.h2>
+                  <motion.p
+                    className="text-gray-700"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5, delay: 0.6 }}
+                  >
+                    Ready to provide excellent patient care today?
+                  </motion.p>
+                  <motion.div
+                    className="mt-2 flex items-center space-x-4 text-sm text-gray-600"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.8 }}
+                  >
                     <span className="flex items-center">
                       <Heart className="h-4 w-4 mr-1 text-red-500" />
                       {stats.totalPatients} Active Patients
@@ -243,14 +280,21 @@ const Dashboard = () => {
                       <Calendar className="h-4 w-4 mr-1 text-blue-500" />
                       {stats.recentRegistrations} New This Week
                     </span>
-                  </div>
+                  </motion.div>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-            {}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="bg-medical-light-blue rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+            <motion.div
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+              variants={containerVariants}
+            >
+              <motion.div
+                className="bg-gradient-to-br from-medical-light-blue to-blue-100 rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow"
+                variants={itemVariants}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
                 <div className="flex items-center">
                   <div className="p-3 bg-blue-50 rounded-full">
                     {loadingStats ? (
@@ -266,9 +310,14 @@ const Dashboard = () => {
                     </p>
                   </div>
                 </div>
-              </div>
+              </motion.div>
 
-              <div className="bg-medical-light-green rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+              <motion.div
+                className="bg-gradient-to-br from-medical-light-green to-green-100 rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow"
+                variants={itemVariants}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
                 <div className="flex items-center">
                   <div className="p-3 bg-green-50 rounded-full">
                     {loadingStats ? (
@@ -284,9 +333,14 @@ const Dashboard = () => {
                     </p>
                   </div>
                 </div>
-              </div>
+              </motion.div>
 
-              <div className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+              <motion.div
+                className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow"
+                variants={itemVariants}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
                 <div className="flex items-center">
                   <div className="p-3 bg-orange-50 rounded-full">
                     {loadingStats ? (
@@ -302,15 +356,20 @@ const Dashboard = () => {
                     </p>
                   </div>
                 </div>
-              </div>
+              </motion.div>
 
-              <div className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
+              <motion.div
+                className={`bg-gradient-to-br ${stats.systemStatus === 'online' ? 'from-green-50 to-green-100' : 'from-red-50 to-red-100'} rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow`}
+                variants={itemVariants}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
                 <div className="flex items-center">
                   <div className={`p-3 rounded-full ${stats.systemStatus === 'online' ? 'bg-green-50' : 'bg-red-50'}`}>
                     {loadingStats ? (
                       <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-gray-600"></div>
                     ) : (
-                      <div className={`h-3 w-3 rounded-full ${stats.systemStatus === 'online' ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                      <Shield className={`h-6 w-6 ${stats.systemStatus === 'online' ? 'text-green-600' : 'text-red-600'}`} />
                     )}
                   </div>
                   <div className="ml-4">
@@ -320,49 +379,85 @@ const Dashboard = () => {
                     </p>
                   </div>
                 </div>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
 
-            {}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {}
-              <div className="bg-white rounded-lg shadow-sm p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
-                <div className="grid grid-cols-2 gap-4">
+            <motion.div
+              className="grid grid-cols-1 lg:grid-cols-2 gap-6"
+              variants={containerVariants}
+            >
+              <motion.div
+                className="bg-white rounded-xl shadow-sm border border-gray-100"
+                variants={itemVariants}
+              >
+                <div className="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-medical-light-blue to-white rounded-t-xl">
+                  <h3 className="text-lg font-semibold text-gray-900">Quick Actions</h3>
+                </div>
+                <div className="p-6 grid grid-cols-2 gap-4">
                   {quickActions.map((action, index) => (
-                    <button
+                    <motion.button
                       key={index}
                       onClick={action.action}
-                      className="bg-gradient-to-br from-blue-50 to-blue-100 text-blue-700 p-4 rounded-lg hover:from-blue-100 hover:to-blue-200 transition-all duration-200 flex flex-col items-center shadow-sm hover:shadow-md"
+                      className={`bg-gradient-to-br ${action.color} p-4 rounded-lg hover:opacity-90 transition-all duration-200 flex flex-col items-center shadow-sm hover:shadow-md`}
+                      whileHover={{ scale: 1.05, y: -2 }}
+                      whileTap={{ scale: 0.95 }}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: index * 0.1 }}
                     >
-                      <action.icon className="h-6 w-6 mb-2 text-blue-600" />
+                      <action.icon className="h-6 w-6 mb-2 opacity-90" />
                       <span className="text-sm font-medium">{action.name}</span>
-                    </button>
+                    </motion.button>
                   ))}
                 </div>
-              </div>
+              </motion.div>
 
-              {}
-              <div className="bg-white rounded-lg shadow-sm p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
-                <div className="space-y-4">
+              <motion.div
+                className="bg-white rounded-xl shadow-sm border border-gray-100"
+                variants={itemVariants}
+              >
+                <div className="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-medical-light-purple to-white rounded-t-xl">
+                  <h3 className="text-lg font-semibold text-gray-900">Recent Activity</h3>
+                </div>
+                <div className="p-6 space-y-4">
                   {recentActivities.map((activity, index) => (
-                    <div key={index} className="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg">
-                      <div className="p-2 bg-white rounded-full shadow-sm">
-                        <activity.icon className="h-4 w-4 text-gray-600" />
+                    <motion.div
+                      key={index}
+                      className={`flex items-start space-x-3 p-3 rounded-lg border transition-colors ${
+                        activity.type === 'patient' ? 'bg-blue-50 border-blue-200' :
+                        activity.type === 'upload' ? 'bg-green-50 border-green-200' :
+                        'bg-purple-50 border-purple-200'
+                      }`}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.4, delay: index * 0.1 }}
+                      whileHover={{ scale: 1.02 }}
+                    >
+                      <div className={`p-2 rounded-full shadow-sm ${
+                        activity.type === 'patient' ? 'bg-blue-100' :
+                        activity.type === 'upload' ? 'bg-green-100' :
+                        'bg-purple-100'
+                      }`}>
+                        <activity.icon className={`h-4 w-4 ${
+                          activity.type === 'patient' ? 'text-blue-600' :
+                          activity.type === 'upload' ? 'text-green-600' :
+                          'text-purple-600'
+                        }`} />
                       </div>
                       <div className="flex-1">
                         <p className="text-sm text-gray-900 font-medium">{activity.message}</p>
                         <p className="text-xs text-gray-500">{activity.time}</p>
                       </div>
-                    </div>
+                    </motion.div>
                   ))}
                 </div>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
 
-            {}
-            <div className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-lg shadow-sm p-6">
+            <motion.div
+              className="bg-gradient-to-r from-medical-light-gray to-medical-light-blue rounded-xl shadow-sm p-6 border border-gray-100"
+              variants={itemVariants}
+            >
               <div className="flex items-center space-x-4">
                 <div className="flex-1">
                   <div className="relative">
@@ -376,23 +471,30 @@ const Dashboard = () => {
                       onFocus={() => searchTerm && setShowSearchResults(true)}
                       className="w-full pl-10 pr-4 py-3 border border-blue-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white shadow-sm"
                     />
-                    {}
                     {showSearchResults && searchResults.length > 0 && (
-                      <div className="absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-lg z-10 max-h-80 overflow-y-auto">
+                      <motion.div
+                        className="absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-lg z-10 max-h-80 overflow-y-auto border"
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                      >
                         {searchResults.map((result, index) => (
-                          <div
+                          <motion.div
                             key={`${result.type}-${result.id}-${index}`}
-                            className="flex items-center p-3 hover:bg-gray-50 cursor-pointer last:border-b-0"
+                            className="flex items-center p-3 hover:bg-gray-50 cursor-pointer last:border-b-0 border-gray-200"
                             onClick={() => {
                               if (result.type === 'patient') {
                                 window.location.href = `/record-viewing?id=${result.id}`
                               } else {
-
                                 console.log('Bundle clicked:', result.id)
                               }
                               setShowSearchResults(false)
                               setSearchTerm('')
                             }}
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.2, delay: index * 0.05 }}
+                            whileHover={{ backgroundColor: '#f9fafb' }}
                           >
                             <div className="p-2 bg-blue-50 rounded-full mr-3">
                               <result.icon className="h-4 w-4 text-blue-600" />
@@ -402,21 +504,25 @@ const Dashboard = () => {
                               <p className="text-xs text-gray-600">{result.subtitle}</p>
                               <p className="text-xs text-gray-500">{result.details}</p>
                             </div>
-                          </div>
+                          </motion.div>
                         ))}
-                      </div>
+                      </motion.div>
                     )}
                   </div>
                 </div>
-                <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg flex items-center space-x-2 shadow-sm hover:shadow-md transition-all duration-200">
+                <motion.button
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg flex items-center space-x-2 shadow-sm hover:shadow-md transition-all duration-200"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
                   <Settings className="h-4 w-4" />
                   <span>Settings</span>
-                </button>
+                </motion.button>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         ) : (
-          <div className="bg-white rounded-lg shadow-sm">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100">
             <PatientDetails />
           </div>
         )}

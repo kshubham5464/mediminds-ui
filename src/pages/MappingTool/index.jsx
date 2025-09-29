@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import { Home, Search, Upload, FileText, Code, ChevronDown, ChevronUp, AlertCircle, CheckCircle, X, Loader } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 
+const API_BASE = (import.meta.env && import.meta.env.VITE_API_BASE) ? import.meta.env.VITE_API_BASE : 'http://localhost:5000';
+
 const MappingTool = () => {
   const { user } = useAuth()
   const [searchType, setSearchType] = useState('namaste')
@@ -29,12 +31,28 @@ const MappingTool = () => {
     }, 5000)
   }
 
+  const downloadText = (filename, content) => {
+    try {
+      const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error('Download failed', e);
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       setLoadingCodes(true)
       try {
         const fetchNamasteCodes = async () => {
-          const response = await fetch('http://65.2.124.178:5000/api/namaste')
+          const response = await fetch(`${API_BASE}/api/namaste`)
           const data = await response.json()
           setNamasteCodes(data.map(item => ({
             code: item.code,
@@ -51,7 +69,7 @@ const MappingTool = () => {
         }
 
         const fetchICDCodes = async () => {
-          const response = await fetch('http://65.2.124.178:5000/api/icd')
+          const response = await fetch(`${API_BASE}/api/icd`)
           const data = await response.json()
           setIcdCodes(data.map(item => ({
             code: item.code,
@@ -64,7 +82,7 @@ const MappingTool = () => {
         }
 
         const fetchDiseaseMappings = async () => {
-          const response = await fetch('http://65.2.124.178:5000/api/disease-mappings')
+          const response = await fetch(`${API_BASE}/api/disease-mappings`)
           const data = await response.json()
           setDiseaseMappings(data)
         }
@@ -248,7 +266,7 @@ const MappingTool = () => {
     if (bundle) {
       setGeneratingFHIR(true)
       try {
-        const response = await fetch('http://65.2.124.178:5000/api/upload/fhir', {
+        const response = await fetch(`${API_BASE}/api/upload/fhir`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(bundle)
@@ -285,8 +303,9 @@ const MappingTool = () => {
         definition: code.definition || code.shortDefinition
       }))
     }
-    console.log('NAMASTE CodeSystem:', JSON.stringify(codeSystem, null, 2))
-    showNotification('success', 'NAMASTE CodeSystem generated! Check browser console.')
+    const json = JSON.stringify(codeSystem, null, 2)
+    downloadText(`namaste-codesystem-${new Date().toISOString().replace(/[:.]/g, '-')}.txt`, json)
+    showNotification('success', 'NAMASTE CodeSystem downloaded')
   }
 
   const generateICDCodeSystem = () => {
@@ -305,8 +324,9 @@ const MappingTool = () => {
         definition: code.definition || code.shortDefinition
       }))
     }
-    console.log('ICD-II CodeSystem:', JSON.stringify(codeSystem, null, 2))
-    showNotification('success', 'ICD-II CodeSystem generated! Check browser console.')
+    const json = JSON.stringify(codeSystem, null, 2)
+    downloadText(`icd-codesystem-${new Date().toISOString().replace(/[:.]/g, '-')}.txt`, json)
+    showNotification('success', 'ICD CodeSystem downloaded')
   }
 
   const generateConceptMap = () => {
@@ -332,15 +352,16 @@ const MappingTool = () => {
         }))
       }]
     }
-    console.log('ConceptMap:', JSON.stringify(conceptMap, null, 2))
-    showNotification('success', 'ConceptMap generated! Check browser console.')
+    const json = JSON.stringify(conceptMap, null, 2)
+    downloadText(`conceptmap-namaste-icd11-${new Date().toISOString().replace(/[:.]/g, '-')}.txt`, json)
+    showNotification('success', 'ConceptMap downloaded')
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gradient-to-br from-medical-light-gray to-medical-light-blue">
       {/* Notifications */}
       {notifications.map(notification => (
-        <div key={notification.id} className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${notification.type === 'success' ? 'bg-green-500' : 'bg-red-500'} text-white flex items-center`}>
+        <div key={notification.id} className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-md border ${notification.type === 'success' ? 'bg-green-50 border-green-200 text-green-800' : 'bg-red-50 border-red-200 text-red-800'} flex items-center`}>
           {notification.type === 'success' ? <CheckCircle className="h-5 w-5 mr-2" /> : <AlertCircle className="h-5 w-5 mr-2" />}
           {notification.message}
           <button onClick={() => setNotifications(prev => prev.filter(n => n.id !== notification.id))} className="ml-4">
@@ -374,15 +395,27 @@ const MappingTool = () => {
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <div className="bg-white px-4 py-2 rounded-lg shadow-sm border">
+              <div className="bg-blue-50 px-4 py-2 rounded-lg shadow-sm border border-blue-200 text-blue-800">
                 <span className="text-sm text-gray-600">Doctor Portal</span>
               </div>
             </div>
           </div>
         </div>
 
+        <div className="mb-6 flex flex-wrap gap-3">
+          <span className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-800 text-sm">NAMASTE Codes: {namasteCodes.length}</span>
+          <span className="inline-flex items-center px-3 py-1 rounded-full bg-green-50 border border-green-200 text-green-800 text-sm">ICD Codes: {icdCodes.length}</span>
+          <span className="inline-flex items-center px-3 py-1 rounded-full bg-purple-50 border border-purple-200 text-purple-800 text-sm">Mappings: {diseaseMappings.length}</span>
+        </div>
+
+        {loadingCodes && (
+          <div className="mb-6 p-3 bg-blue-50 border border-blue-200 rounded-md text-blue-800">
+            Loading code sets...
+          </div>
+        )}
+
       {user && (
-        <div className="bg-white border rounded-lg shadow-sm mb-6">
+        <div className="bg-white/90 border border-gray-100 rounded-xl shadow-sm backdrop-blur-sm mb-6">
           <div className="flex items-center justify-between p-4 border-b">
             <h3 className="text-lg font-semibold text-gray-900">Patient Information</h3>
             <button onClick={() => setPatientDetailsExpanded(!patientDetailsExpanded)} className="text-gray-500 hover:text-gray-700">
@@ -412,7 +445,7 @@ const MappingTool = () => {
         </div>
       )}
 
-      <div className="bg-gray-50 p-4 rounded-lg mb-6">
+      <div className="bg-blue-50 p-4 rounded-xl border border-blue-100 mb-6">
         <div className="flex flex-col md:flex-row gap-4 mb-4">
           <div className="flex-1">
             <label className="block text-sm font-medium text-gray-700 mb-2">Search Type</label>
@@ -451,6 +484,12 @@ const MappingTool = () => {
         </div>
       </div>
 
+      {searchTerm.trim().length > 0 && searchResults.length === 0 && !loading && (
+        <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-yellow-800">
+          No results found. Try a different term or switch search type.
+        </div>
+      )}
+
       {searchResults.length > 0 && (
         <div className="mb-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-3">Search Results</h3>
@@ -467,7 +506,7 @@ const MappingTool = () => {
                       setSelectedCodes([...selectedCodes, code])
                     }
                   }}
-                  className={`border rounded-lg p-4 cursor-pointer transition-colors ${
+                  className={`border rounded-lg p-4 cursor-pointer transition-colors transition-transform hover:translate-y-0.5 ${
                     isSelected ? 'bg-blue-50 border-blue-300' : 'bg-white hover:bg-gray-50'
                   }`}
                 >
@@ -516,7 +555,7 @@ const MappingTool = () => {
       )}
 
       {selectedCodes.length > 0 && (
-        <div className="bg-white border rounded-lg shadow-sm mb-6">
+        <div className="bg-white/90 border border-gray-100 rounded-xl shadow-sm backdrop-blur-sm mb-6">
           <div className="flex items-center justify-between p-4 border-b">
             <h3 className="text-lg font-semibold text-gray-900">Selected Codes ({selectedCodes.length})</h3>
             <div className="flex items-center space-x-2">
@@ -551,7 +590,7 @@ const MappingTool = () => {
       )}
 
       {selectedCodes.length > 0 && (
-        <div className="bg-white border rounded-lg shadow-sm mb-6">
+        <div className="bg-white/90 border border-gray-100 rounded-xl shadow-sm backdrop-blur-sm mb-6">
           <div className="flex items-center justify-between p-4 border-b">
             <h3 className="text-lg font-semibold text-gray-900">Code Mapping Results</h3>
             <button onClick={() => setMappingResultsExpanded(!mappingResultsExpanded)} className="text-gray-500 hover:text-gray-700">
