@@ -1,24 +1,57 @@
-import React from 'react'
-import ThemeToggle from './ThemeToggle'
+import React from "react";
+import { Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
-const Header = ({ title = "Hospital EMR System" }) => {
+const Header = () => {
+  const { user, logout } = useAuth();
   return (
-    <header className="bg-white dark:bg-gray-800 shadow-sm transition-colors duration-300">
+    <header className="bg-gradient-to-r from-white-900 to-white-900 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <div className="flex items-center">
-            <div className="h-8 w-8 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded flex items-center justify-center mr-3 transition-colors duration-300">
-              <span className="text-gray-700 dark:text-gray-300 font-bold text-sm">EMR</span>
+        <div className="flex justify-between items-center h-20">
+          <div className="flex items-center space-x-4">
+            <img
+              src="/ashoka_emblem.png"
+              alt="Ashoka Stambh"
+              className="h-16 w-auto"
+            />
+            <div className="border-l-2 border-white pl-5 flex items-center space-x-3">
+              <Link to="/dashboard">
+                <img
+                  src="/image.png"
+                  alt="AYUSH Logo"
+                  className="h-16 w-auto hover:opacity-80 transition-opacity"
+                />
+              </Link>
+              <div>
+                <h1 className="text-lg font-bold text-black">
+                  National AYUSH Terminology Platform
+                </h1>
+                <p className="text-xs text-black-150">
+                  Government of India • Ministry of Ayush
+                </p>
+              </div>
             </div>
-            <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">{title}</h1>
           </div>
           <div className="flex items-center space-x-4">
-            <ThemeToggle />
+            <span className="text-sm text-black">
+              Welcome, {user?.firstName} {user?.lastName}
+            </span>
+            <button
+              onClick={logout}
+              className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors border = 2 border-red-500"
+            >
+              Logout
+            </button>
+           <img
+              src="/azadi_ka_amrit_mahotsav.png"
+              alt="Azadi Ka Amrit Mahotsav"
+              className="h-13 w-auto bg-white p-0.1 rounded"
+            />
           </div>
         </div>
       </div>
     </header>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

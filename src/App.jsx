@@ -10,6 +10,8 @@ import DataIngestion from "./pages/DataIngestion";
 import RecordViewing from "./pages/RecordViewing";
 import APIDocs from "./pages/APIDocs";
 import NamasteList from "./components/NamasteList";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 import "./App.css";
 
 function AnimatedRoutes() {
@@ -32,91 +34,103 @@ function AnimatedRoutes() {
         <Route
           path="/dashboard"
           element={
-            <motion.div
-              initial={{ opacity: 0, y: -30 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 30 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-            >
-              <ProtectedRoute>
+            <ProtectedRoute>
+              <Header />
+              <motion.div
+                initial={{ opacity: 0, y: -30 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 30 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+              >
                 <Dashboard />
-              </ProtectedRoute>
-            </motion.div>
+              </motion.div>
+              <Footer />
+            </ProtectedRoute>
           }
         />
         <Route
           path="/upload-csv"
           element={
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-            >
-              <ProtectedRoute>
+            <ProtectedRoute>
+              <Header />
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+              >
                 <UploadCsv />
-              </ProtectedRoute>
-            </motion.div>
+              </motion.div>
+              <Footer />
+            </ProtectedRoute>
           }
         />
                 <Route
           path="/mapping-tool"
           element={
-            <motion.div
-              initial={{ opacity: 0, x: 100 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -100 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-            >
-              <ProtectedRoute>
+            <ProtectedRoute>
+              <Header />
+              <motion.div
+                initial={{ opacity: 0, x: 100 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -100 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+              >
                 <MappingTool />
-              </ProtectedRoute>
-            </motion.div>
+              </motion.div>
+              <Footer />
+            </ProtectedRoute>
           }
         />
         <Route
           path="/data-ingestion"
           element={
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -30 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-            >
-              <ProtectedRoute>
+            <ProtectedRoute>
+              <Header />
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -30 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+              >
                 <DataIngestion />
-              </ProtectedRoute>
-            </motion.div>
+              </motion.div>
+              <Footer />
+            </ProtectedRoute>
           }
         />
         <Route
           path="/record-viewing"
           element={
-            <motion.div
-              initial={{ opacity: 0, scale: 1.05 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 1.05 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-            >
-              <ProtectedRoute>
+            <ProtectedRoute>
+              <Header />
+              <motion.div
+                initial={{ opacity: 0, scale: 1.05 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 1.05 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+              >
                 <RecordViewing />
-              </ProtectedRoute>
-            </motion.div>
+              </motion.div>
+              <Footer />
+            </ProtectedRoute>
           }
         />
         <Route
           path="/api-docs"
           element={
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-            >
-              <ProtectedRoute>
+            <ProtectedRoute>
+              <Header />
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+              >
                 <APIDocs />
-              </ProtectedRoute>
-            </motion.div>
+              </motion.div>
+              <Footer />
+            </ProtectedRoute>
           }
         />
         <Route path="/namaste" element={

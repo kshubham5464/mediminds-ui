@@ -202,7 +202,7 @@ const CodeBlock = ({ title, code }) => (
 )
 
 const APIDocs = () => {
-  const baseUrl = (import.meta.env && import.meta.env.VITE_API_BASE) ? import.meta.env.VITE_API_BASE : 'http://localhost:5000'
+  const baseUrl = (import.meta.env && import.meta.env.VITE_API_BASE) ? import.meta.env.VITE_API_BASE : 'https://mediminds.up.railway.app'
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-medical-light-purple via-medical-light-teal to-medical-light-blue">
@@ -213,7 +213,7 @@ const APIDocs = () => {
           transition={{ duration: 0.5 }}
           className="bg-white/90 backdrop-blur-sm rounded-2xl border border-gray-100 shadow-sm p-8 mb-8"
         >
-          <h1 className="text-3xl font-bold text-gray-900">EMR API Documentation</h1>
+          <h1 className="text-3xl font-bold text-gray-900">MediMinds API Documentation</h1>
           <p className="mt-2 text-gray-700">Endpoints for terminology ingestion, mappings, patient retrieval, and FHIR bundle upload.</p>
           <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
             <div className="bg-blue-50 border border-blue-200 text-blue-800 rounded-lg p-3">Base URL: <span className="font-mono">{baseUrl}</span></div>

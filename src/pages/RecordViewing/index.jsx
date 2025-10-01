@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Home } from 'lucide-react'
+import { Home, Trash2 } from 'lucide-react'
+import { resetBundles } from '../../services/patientApi'
 
 const RecordViewing = () => {
   const [patients, setPatients] = useState([])
@@ -11,6 +12,7 @@ const RecordViewing = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [fhirFile, setFhirFile] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [deletedBundles, setDeletedBundles] = useState(new Set(JSON.parse(localStorage.getItem('deletedBundles') || '[]')))
 
   useEffect(() => {
     loadRecords()
@@ -18,12 +20,12 @@ const RecordViewing = () => {
 
   const loadRecords = async () => {
     try {
-      const patientsRes = await fetch('https://mediminds.up.railway.app/api/patients')
+      const patientsRes = await fetch(`https://mediminds.up.railway.app/api/patients?t=${Date.now()}`)
       const patients = await patientsRes.json()
       setPatients(patients)
-      const bundlesRes = await fetch('https://mediminds.up.railway.app/api/fhir-bundles')
+      const bundlesRes = await fetch(`https://mediminds.up.railway.app/api/fhir-bundles?t=${Date.now()}`)
       const bundles = await bundlesRes.json()
-      setFhirBundles(bundles)
+      setFhirBundles(bundles.filter(b => !deletedBundles.has(b.id)))
     } catch (error) {
       console.error('Error loading records:', error)
     }
@@ -32,7 +34,8 @@ const RecordViewing = () => {
   const filteredPatients = patients.filter((patient) => {
     const searchLower = searchTerm.toLowerCase();
     return (
-      patient.name?.toLowerCase().includes(searchLower) ||
+      patient.firstName?.toLowerCase().includes(searchLower) ||
+      patient.lastName?.toLowerCase().includes(searchLower) ||
       patient.id?.toLowerCase().includes(searchLower) ||
       patient.conditions?.some(
         (c) =>
@@ -89,13 +92,45 @@ const RecordViewing = () => {
     })
   }
 
+  const handleDeleteBundle = async (bundleId) => {
+    if (window.confirm('Are you sure you want to delete this FHIR bundle?')) {
+      // Add to deleted bundles and save to localStorage
+      const newDeleted = new Set(deletedBundles)
+      newDeleted.add(bundleId)
+      setDeletedBundles(newDeleted)
+      localStorage.setItem('deletedBundles', JSON.stringify([...newDeleted]))
+      // Dispatch event for real-time updates
+      window.dispatchEvent(new CustomEvent('bundlesUpdated'))
+      // Remove from local state
+      setFhirBundles(prev => prev.filter(b => b.id !== bundleId))
+      alert('Bundle deleted successfully')
+    }
+  }
+
+  const handleResetBundles = async () => {
+    if (window.confirm('Are you sure you want to reset all FHIR bundles? This action cannot be undone.')) {
+      const result = await resetBundles()
+      if (result.success) {
+        // Clear deleted bundles
+        setDeletedBundles(new Set())
+        localStorage.removeItem('deletedBundles')
+        // Dispatch event for real-time updates
+        window.dispatchEvent(new CustomEvent('bundlesUpdated'))
+        alert('All bundles reset successfully')
+        loadRecords()
+      } else {
+        alert('Error resetting bundles: ' + result.error)
+      }
+    }
+  }
+
   const PatientDetailView = ({ patient }) => (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <h4 className="font-semibold text-gray-900 mb-3">Personal Information</h4>
           <div className="space-y-2 text-sm">
-            <div><span className="font-medium">Name:</span> {patient.name}</div>
+            <div><span className="font-medium">Name:</span> {patient.firstName} {patient.lastName}</div>
             <div><span className="font-medium">Gender:</span> {patient.gender}</div>
             <div><span className="font-medium">Date of Birth:</span> {patient.birthDate}</div>
             <div><span className="font-medium">ID:</span> {patient.id}</div>
@@ -274,9 +309,21 @@ const RecordViewing = () => {
         <div className="lg:col-span-1">
           <div className="bg-white border rounded-lg">
             <div className="p-4 border-b">
-              <h3 className="font-semibold text-gray-900 mb-2">
-                {viewMode === 'patient' ? 'Patients' : viewMode === 'fhir' ? 'FHIR Bundles' : 'Upload FHIR'}
-              </h3>
+              <div className="flex justify-between items-center mb-2">
+                <h3 className="font-semibold text-gray-900">
+                  {viewMode === 'patient' ? 'Patients' : viewMode === 'fhir' ? 'FHIR Bundles' : 'Upload FHIR'}
+                </h3>
+                {viewMode === 'fhir' && (
+                  <button
+                    onClick={handleResetBundles}
+                    className="px-2 py-1 bg-red-600 text-white rounded text-xs hover:bg-red-700 flex items-center"
+                    title="Reset all FHIR bundles"
+                  >
+                    <Trash2 className="h-3 w-3 mr-1" />
+                    Reset All
+                  </button>
+                )}
+              </div>
               {viewMode === 'patient' && (
                 <input
                   type="text"
@@ -303,7 +350,7 @@ const RecordViewing = () => {
                       }`}
                     >
                       <div className="font-medium text-sm">
-                        {patient.name}
+                        {patient.firstName} {patient.lastName}
                       </div>
                       <div className="text-xs text-gray-600">{patient.id}</div>
                     </div>
@@ -317,14 +364,28 @@ const RecordViewing = () => {
                   {fhirBundles.map((bundle, index) => (
                     <div
                       key={bundle.id}
-                      onClick={() => setSelectedRecord({ type: 'bundle', data: bundle })}
-                      className="p-3 border-b cursor-pointer hover:bg-gray-50"
+                      className="p-3 border-b hover:bg-gray-50"
                     >
-                      <div className="font-medium text-sm">Bundle #{index + 1}</div>
-                      <div className="text-xs text-gray-600">{formatDate(bundle.timestamp)}</div>
-                      <div className="text-xs text-gray-500">
-                        {bundle.entry?.length || 0} entries
+                      <div
+                        onClick={() => setSelectedRecord({ type: 'bundle', data: bundle })}
+                        className="cursor-pointer flex-1"
+                      >
+                        <div className="font-medium text-sm">Bundle #{index + 1}</div>
+                        <div className="text-xs text-gray-600">{formatDate(bundle.timestamp)}</div>
+                        <div className="text-xs text-gray-500">
+                          {bundle.entry?.length || 0} entries
+                        </div>
                       </div>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleDeleteBundle(bundle.id)
+                        }}
+                        className="ml-2 p-1 text-red-600 hover:text-red-800 hover:bg-red-50 rounded"
+                        title="Delete bundle"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
                     </div>
                   ))}
                   {fhirBundles.length === 0 && (
