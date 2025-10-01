@@ -522,6 +522,10 @@ app.post("/api/upload/fhir", (req, res) => {
  * Get all patients
  */
 app.get("/api/patients", (req, res) => {
+  // Disable caching
+  res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.set('Pragma', 'no-cache');
+  res.set('Expires', '0');
   res.json(patientsData);
 });
 
@@ -529,7 +533,34 @@ app.get("/api/patients", (req, res) => {
  * Get all FHIR bundles
  */
 app.get("/api/fhir-bundles", (req, res) => {
+  // Disable caching
+  res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.set('Pragma', 'no-cache');
+  res.set('Expires', '0');
   res.json(fhirBundlesData);
+});
+
+/*
+ * Delete a FHIR bundle by ID
+ */
+app.delete("/api/fhir-bundles/:id", (req, res) => {
+  const { id } = req.params;
+  const index = fhirBundlesData.findIndex(b => b.id === id);
+  if (index === -1) {
+    return res.status(404).json({ error: "Bundle not found" });
+  }
+  fhirBundlesData.splice(index, 1);
+  fs.writeFileSync(FHIR_BUNDLES_FILE, JSON.stringify(fhirBundlesData, null, 2));
+  res.json({ message: "Bundle deleted successfully" });
+});
+
+/*
+ * Reset all FHIR bundles
+ */
+app.post("/api/reset/fhir-bundles", (req, res) => {
+  fhirBundlesData = [];
+  fs.writeFileSync(FHIR_BUNDLES_FILE, JSON.stringify(fhirBundlesData, null, 2));
+  res.json({ message: "All FHIR bundles reset successfully" });
 });
 
 
