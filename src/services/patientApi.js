@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://65.2.124.178:5000/api";
+const API_BASE_URL = "https://mediminds.up.railway.app/api";
 export const fetchPatientByAbhaId = async (abhaId) => {
   try {
     const response = await fetch(`${API_BASE_URL}/patient/${abhaId}`, {

@@ -7,7 +7,7 @@ const NamasteList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch("http://65.2.124.178:5000/api/namaste");
+        const res = await fetch("https://mediminds.up.railway.app/api/namaste");
         const json = await res.json();
         setData(json);
       } catch (err) {

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { Home, Search, Upload, FileText, Code, ChevronDown, ChevronUp, AlertCircle, CheckCircle, X, Loader } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 
-const API_BASE = (import.meta.env && import.meta.env.VITE_API_BASE) ? import.meta.env.VITE_API_BASE : 'http://localhost:5000';
+const API_BASE = (import.meta.env && import.meta.env.VITE_API_BASE) ? import.meta.env.VITE_API_BASE : 'https://mediminds.up.railway.app';
 
 const MappingTool = () => {
   const { user } = useAuth()
