@@ -19,11 +19,13 @@ import {
   Heart,
   Calendar,
   Shield,
+  Menu,
 } from "lucide-react";
 
 const Dashboard = () => {
   const { user, login } = useAuth();
   const [activeTab, setActiveTab] = useState("overview");
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [showSearchResults, setShowSearchResults] = useState(false);
@@ -235,9 +237,19 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-medical-light-gray to-white">
-      <nav className="bg-white/70 backdrop-blur shadow-sm hidden md:block">
+      <nav className="bg-white/70 backdrop-blur shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex space-x-8">
+          {/* Mobile menu button */}
+          <div className="md:hidden flex justify-end py-2">
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="p-2 text-gray-500 hover:text-gray-700"
+            >
+              <Menu className="h-6 w-6" />
+            </button>
+          </div>
+          {/* Desktop menu */}
+          <div className="hidden md:flex space-x-8">
             {sections.map((section) =>
               section.route ? (
                 <Link
@@ -264,6 +276,40 @@ const Dashboard = () => {
               )
             )}
           </div>
+          {/* Mobile menu */}
+          {isMobileMenuOpen && (
+            <div className="md:hidden flex flex-col space-y-2 py-4">
+              {sections.map((section) =>
+                section.route ? (
+                  <Link
+                    key={section.id}
+                    to={section.route}
+                    className="flex items-center px-3 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <span className="mr-2 text-lg">{section.icon}</span>
+                    {section.name}
+                  </Link>
+                ) : (
+                  <button
+                    key={section.id}
+                    onClick={() => {
+                      setActiveTab(section.id);
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className={`flex items-center px-3 py-2 text-sm font-medium transition-colors ${
+                      activeTab === section.id
+                        ? "text-blue-600"
+                        : "text-gray-500 hover:text-gray-700"
+                    }`}
+                  >
+                    <span className="mr-2 text-lg">{section.icon}</span>
+                    {section.name}
+                  </button>
+                )
+              )}
+            </div>
+          )}
         </div>
       </nav>
 
@@ -458,7 +504,7 @@ const Dashboard = () => {
                     Quick Actions
                   </h3>
                 </div>
-                <div className="p-6 grid grid-cols-2 gap-4">
+                <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {quickActions.map((action, index) => (
                     <motion.button
                       key={index}

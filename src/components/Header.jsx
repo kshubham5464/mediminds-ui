@@ -7,23 +7,23 @@ const Header = () => {
   return (
     <header className="bg-gradient-to-r from-white-900 to-white-900 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
-          <div className="flex items-center space-x-4">
+        <div className="flex flex-col sm:flex-row justify-between items-center py-4 sm:h-20">
+          <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4 mb-4 sm:mb-0">
             <img
               src="/ashoka_emblem.png"
               alt="Ashoka Stambh"
-              className="h-16 w-auto"
+              className="h-12 sm:h-16 w-auto"
             />
-            <div className="border-l-2 border-white pl-5 flex items-center space-x-3">
+            <div className="border-l-2 border-white pl-0 sm:pl-5 flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-3">
               <Link to="/dashboard">
                 <img
                   src="/image.png"
                   alt="AYUSH Logo"
-                  className="h-16 w-auto hover:opacity-80 transition-opacity"
+                  className="h-12 sm:h-16 w-auto hover:opacity-80 transition-opacity"
                 />
               </Link>
-              <div>
-                <h1 className="text-lg font-bold text-black">
+              <div className="text-center sm:text-left">
+                <h1 className="text-base sm:text-lg font-bold text-black">
                   National AYUSH Terminology Platform
                 </h1>
                 <p className="text-xs text-black-150">
@@ -32,20 +32,20 @@ const Header = () => {
               </div>
             </div>
           </div>
-          <div className="flex items-center space-x-4">
-            <span className="text-sm text-black">
+          <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4">
+            <span className="text-sm text-black text-center sm:text-left">
               Welcome, {user?.firstName} {user?.lastName}
             </span>
             <button
               onClick={logout}
-              className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors border = 2 border-red-500"
+              className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors border border-red-500"
             >
               Logout
             </button>
-           <img
+            <img
               src="/azadi_ka_amrit_mahotsav.png"
               alt="Azadi Ka Amrit Mahotsav"
-              className="h-13 w-auto bg-white p-0.1 rounded"
+              className="h-10 sm:h-13 w-auto bg-white p-0.1 rounded"
             />
           </div>
         </div>
