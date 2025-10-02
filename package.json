@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
   "name": "hospital-emr-system",
   "private": true,
   "version": "0.0.0",
@@ -41,29 +40,4 @@
   "keywords": [],
   "author": "",
   "license": "ISC"
-=======
-  "name": "backend",
-  "version": "1.0.0",
-  "main": "index.js",
-  "type": "module",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "dependencies": {
-    "ajv": "^8.17.1",
-    "cors": "^2.8.5",
-    "csv-parse": "^6.1.0",
-    "csv-parser": "^3.2.0",
-    "express": "^5.1.0",
-    "fuzzball": "^2.1.2",
-    "multer": "^2.0.2",
-    "papaparse": "^5.5.3",
-    "uuid": "^13.0.0"
-  }
->>>>>>> 69e4a7510ff9ed40d43e1c6cb6e62d7afe5ea3a6
 }
