@@ -1,0 +1,121 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ABHA Patient Payload",
+  "type": "object",
+  "properties": {
+    "abhaId": {
+      "type": "string",
+      "pattern": "^\\d{2}-\\d{4}-\\d{4}-\\d{4}$",
+      "description": "ABHA ID in format XX-XXXX-XXXX-XXXX"
+    },
+    "firstName": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Patient's first name"
+    },
+    "lastName": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Patient's last name"
+    },
+    "dateOfBirth": {
+      "type": "string",
+      "description": "Date of birth in YYYY-MM-DD format"
+    },
+    "gender": {
+      "type": "string",
+      "enum": ["male", "female", "other"],
+      "description": "Patient's gender"
+    },
+    "phoneNumber": {
+      "type": "string",
+      "pattern": "^\\+?\\d{10,15}$",
+      "description": "Patient's phone number"
+    },
+    "email": {
+      "type": "string",
+      "description": "Patient's email address"
+    },
+    "address": {
+      "type": "string",
+      "description": "Patient's address"
+    },
+    "city": {
+      "type": "string",
+      "description": "City"
+    },
+    "state": {
+      "type": "string",
+      "description": "State"
+    },
+    "pincode": {
+      "type": "string",
+      "pattern": "^\\d{6}$",
+      "description": "6-digit pincode"
+    },
+    "emergencyContactName": {
+      "type": "string",
+      "description": "Emergency contact name"
+    },
+    "emergencyContactPhone": {
+      "type": "string",
+      "pattern": "^\\+?\\d{10,15}$",
+      "description": "Emergency contact phone"
+    },
+    "emergencyContactRelation": {
+      "type": "string",
+      "description": "Relation to emergency contact"
+    },
+    "bloodGroup": {
+      "type": "string",
+      "enum": ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"],
+      "description": "Blood group"
+    },
+    "allergies": {
+      "type": "string",
+      "description": "Known allergies"
+    },
+    "currentMedications": {
+      "type": "string",
+      "description": "Current medications"
+    },
+    "medicalHistory": {
+      "type": "string",
+      "description": "Medical history summary"
+    },
+    "insuranceProvider": {
+      "type": "string",
+      "description": "Insurance provider"
+    },
+    "insurancePolicyNumber": {
+      "type": "string",
+      "description": "Insurance policy number"
+    },
+    "height": {
+      "type": "number",
+      "minimum": 50,
+      "maximum": 250,
+      "description": "Height in cm"
+    },
+    "weight": {
+      "type": "number",
+      "minimum": 20,
+      "maximum": 200,
+      "description": "Weight in kg"
+    },
+    "maritalStatus": {
+      "type": "string",
+      "enum": ["single", "married", "divorced", "widowed"],
+      "description": "Marital status"
+    },
+    "occupation": {
+      "type": "string",
+      "description": "Occupation"
+    },
+    "registrationDate": {
+      "type": "string",
+      "description": "Registration date"
+    }
+  },
+  "required": ["abhaId", "firstName", "lastName", "dateOfBirth", "gender"]
+}

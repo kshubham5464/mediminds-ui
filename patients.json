@@ -1,0 +1,114 @@
+[
+  {
+    "abhaId": "12-3456-7890-1234",
+    "firstName": "Amit",
+    "lastName": "Sharma",
+    "gender": "male",
+    "birthDate": "1990-01-10",
+    "encounters": [],
+    "conditions": [
+      {
+        "id": "12-3456-7890-1234-0",
+        "code": {
+          "namaste": "ABB-13",
+          "icd": "Unknown"
+        },
+        "display": ""
+      }
+    ],
+    "bundleIds": [
+      "bundle-1758740752870"
+    ]
+  },
+  {
+    "abhaId": "23-4567-8901-2345",
+    "firstName": "Priya",
+    "lastName": "Patel",
+    "gender": "female",
+    "birthDate": "1991-02-11",
+    "encounters": [],
+    "conditions": [
+      {
+        "id": "23-4567-8901-2345-0",
+        "code": {
+          "namaste": "SR43(BB-2)",
+          "icd": "MD90.0"
+        },
+        "display": ""
+      },
+      {
+        "id": "23-4567-8901-2345-0",
+        "code": {
+          "namaste": "ABB-13",
+          "icd": "MD90.0"
+        },
+        "display": ""
+      },
+      {
+        "id": "23-4567-8901-2345-0",
+        "code": {
+          "namaste": "F-60",
+          "icd": "1F40"
+        },
+        "display": ""
+      },
+      {
+        "id": "23-4567-8901-2345-0",
+        "code": {
+          "namaste": "SR14 (AAA-4)",
+          "icd": "1B10"
+        },
+        "display": ""
+      },
+      {
+        "id": "23-4567-8901-2345-0",
+        "code": {
+          "namaste": "SR43(BB-2)",
+          "icd": "MD90.0"
+        },
+        "display": ""
+      },
+      {
+        "id": "23-4567-8901-2345-0",
+        "code": {
+          "namaste": "ABB-13",
+          "icd": "MD90.0"
+        },
+        "display": ""
+      },
+      {
+        "id": "23-4567-8901-2345-1",
+        "code": {
+          "namaste": "SR43(BB-2)",
+          "icd": "MD90.0"
+        },
+        "display": ""
+      },
+      {
+        "id": "23-4567-8901-2345-2",
+        "code": {
+          "namaste": "EC-4.2.2",
+          "icd": "MD90.0"
+        },
+        "display": ""
+      },
+      {
+        "id": "23-4567-8901-2345-0",
+        "code": {
+          "namaste": "F-60",
+          "icd": "1F40"
+        },
+        "display": ""
+      }
+    ],
+    "bundleIds": [
+      "bundle-1758778312540",
+      "bundle-1758778673591",
+      "bundle-1758779984817",
+      "bundle-1758788592493",
+      "bundle-1758794316983",
+      "bundle-1758794731269",
+      "bundle-1758797339302"
+    ]
+  }
+]
